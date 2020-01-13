@@ -1,0 +1,91 @@
+{% extends 'wgs/测序数据质控/qc.html'%}
+{%block background%}
+<h1>SV变异统计</h1>
+<p>
+    染色体结构变异（SV）是染色体变异的一种，类型包括：缺失（Deletion, DEL）、插入（Insertion, INS）、倒位（Inversion, INV）、易位（Translocation,
+    BND）和重复（Duplication, DUP）。
+</p>
+{%endblock%}
+</div>
+{%block parameter%}
+<h3>分析软件</h3>
+<p>分析软件：Delly</p>
+{%endblock%}
+{%block tab%}
+<ul class="layui-tab-title">
+    <li class='layui-this'>SV数据统计</li>
+    <li>SV长度分布</li>
+</ul>
+<div class="layui-tab-content">
+    <div id="SV数据统计" class="layui-tab-item layui-show">
+
+    </div>
+    <div id="SV长度分布" class="layui-tab-item ">
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab1' lay-filter='tab1'>
+                        {% for key in dict_sub %}
+                        <option value={{key}} name='key' }>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <div class="layui-col-xs12">
+                    <label class="sample_label">SV长度分布图：</label>
+                    <img class="tab1_img"
+                        style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: auto;margin-left: auto;display: block"
+                        src="sv_length_distribution.png" />
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p>注： 横坐标表示SV类型的SV长度；纵坐标表示SV的数目/百分比。</p>
+        </div>
+    </div>
+</div>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#SV数据统计'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:sv_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', width: 160, title: 'Samples', sort: true }
+            , { field: 'DEL', title: 'DEL' }
+            , { field: 'DUP', title: 'DUP' }
+            , { field: 'INS', title: 'INS' }
+            , { field: 'BND', title: 'BND' }
+            , { field: 'INV', title: 'INV' }
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab1').val();
+    function tab1_link(sample) {
+        var link = "/media/{{username}}/{{project}}/{{analysis}}/SV/" + sample + "/sv_length_distribution.png";
+        $('.sample_label').text(sample + ' ' + "SV长度分布图：");
+        $('.tab1_img').attr('src', link);
+    }
+    tab1_link(sample);
+    form.on('select(tab1)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    })
+</script>
+{%endblock%}

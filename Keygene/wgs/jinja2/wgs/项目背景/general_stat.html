@@ -1,0 +1,70 @@
+{%extends 'wgs/base.html'%}
+{%block bodycontent%}
+    <div class="layui-fluid">
+        <div class="layui-container">
+            <div class="layui-row layui-col-space20">
+                <div class="layui-col-xs12">
+                    <h1>结果概述</h1><p>
+                        此页面是对本项目相关步骤与分析结果的总结性陈述。
+                    </p>
+                </div>
+                <div class="layui-col-xs12">
+                    <div class="layui-row layui-col-space20">
+                        <div class="layui-col-xs12">
+                            <div class="layui-row">
+                                <div class="layui-col-md6 layui-col-lg1">
+                                    <h2>
+                                        数据质量
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <p>
+                                        本次测序共获得 ( {{clean_data}} )条reads Clean Data，平均每个样品获得 ( {{avg_clean_data}} )条reads Clean Data，
+
+                                        Q30平均值达到 ( {{q30_percent}} ) 。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-row">
+                                <div class="layui-col-md6 layui-col-lg1">
+                                    <h2>
+                                        比对信息
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <p>
+                                        样品与参考基因组平均比对效率为 ( {{avg_mapping_rate}} ) ，
+
+                                        平均覆盖深度为 ( {{avg_mapping_depth}}) ，平均基因组覆盖度为 ( {{coverage}} ) （至少一个碱基覆盖），PCR重复率平均为 ({{duplication}})。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs12">
+                            <div class="layui-row">
+                                <div class="layui-col-md6 layui-col-lg1">
+                                    <h2>
+                                        变异检测
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <p>
+                                        平均每个样本获得 ( {{avg_snp_number}} ) SNP，( {{avg_indel_number}} ) InDel ， ({{avg_cnv_number}}) CNV 。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

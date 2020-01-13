@@ -1,0 +1,99 @@
+<div class="layui-fluid">
+    <div class="layui-container">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend >工具列表</legend>
+        </fieldset>
+
+        <div id='demo' style="padding: 20px; background-color: #F2F2F2;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='有参变异检测'>有参变异检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            全基因组重测序是对已知基因组序列的物种进行不同个体的基因组测序，并在此基础上对个体或群体进行差异性分析。SBC将不同梯度插入片段（Insert-Size）的测序文库结合短序列（Short-Reads）、双末端（Paired-End）进行测序，
+                            在全基因组水平上扫描并检测与重要性状相关的基因序列差异和结构变异，实现遗传进化分析及重要性状候选基因预测。<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='外显子检测'>外显子检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            外显子组测序是基于目标序列捕获技术利用探针捕获和富集外显子区域的DNA序列，再通过高通量测序发现与蛋白质功能变异相关遗传突变的一种基因组分析技术。与全基因组重测序相比，外显子区域大小只占全基因组的1%，
+                            外显子组测序费用更低、周期更短、覆盖度更深、数据准确性更高，更加简便、经济、高效
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='祖源分析'>祖源分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            每个人都有自己独一无二的祖源故事，这些信息记录都在 DNA 中，通过您的常染色体上的数十万多态性位点的检测，帮您从基因角度揭示您的祖源故事。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='常见疾病'>常见疾病检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            机体在各种致癌因素的作用下，局部组织的细胞在基因水平上因为突变失去对其生长的正常调控，导致异常增生与风化而形成的细胞组织。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='肿瘤检测'>肿瘤检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            机体在各种致癌因素的作用下，局部组织的细胞在基因水平上因为突变失去对其生长的正常调控，导致异常增生与风化而形成的细胞组织。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='生理指标'>生理指标检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            您的生物标志物结果将显示您的皮质醇，促甲状腺激素（TSH）和睾酮的个人水平，以及它们是低，正常还是高。
+                            代谢+还检查影响脂肪代谢的特定基因以及您的结果可能会或可能不会影响您的肥胖风险。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='药物反应'>药物反应检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            药物反应基因检测可以了解自己身体对不同药物的反应，产品涵盖大多数常见药物类型，包括呼吸系统、循环系统、血液系统和神经系统等药物。
+                            此外，详细介绍药物的适应症、用药建议、不良反应、药物相互作用、注意事项等，让您活用这些基因资讯，在用药时提高药物效用，同时减轻副作用，避免不良反应。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='常见传染病'>常见传染病检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            这类疾病主要是由致病生物体（寄生虫、病毒）或者微生物（真菌、细菌）引发，如流感、病毒性肝炎、肺炎、结核病、脓毒症、麻风等等。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='个性特征'>个性特征检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            个性特质基因检测将显示您的个性天赋、情绪倾向等方面的潜在表现，结合这些基因资讯，能够帮助您进行更全面和更客观的自我分析。
+                            为您规划自己的人生路线提供方向。
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header" onclick="get_item(this)" value='体质特征'>体质特征检测云分析</div>
+                        <div class="layui-card-body" style='overflow:auto !important;'>
+                            个性特质基因检测将显示您的个性天赋、情绪倾向等方面的潜在表现，结合这些基因资讯，能够帮助您进行更全面和更客观的自我分析。
+                            为您规划自己的人生路线提供方向。
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

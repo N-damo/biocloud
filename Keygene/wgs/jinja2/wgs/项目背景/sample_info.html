@@ -1,0 +1,70 @@
+{%extends 'wgs/base.html'%}
+
+{%block bodycontent%}
+    <div class="layui-fluid">
+        <div class="layui-container">
+            <div class="layui-row layui-col-space20">
+                <div class="layui-col-xs12">
+                    <h1>样本信息</h1><p>
+                        包含该分析项目中，生信部分所用样本信息。
+                    </p>
+                </div>
+                <div class="layui-col-xs12">
+                    <div class="layui-row layui-col-space20">
+                        <div class="layui-col-xs12">
+                            <table id='sample_info' class="layui-table" lay-filter="demo">
+                                
+                            </table>
+                        <div class="layui-col-xs12">
+                            <p></p>
+                            <p>
+                                注：
+                            </p>
+                            <p>
+                                sample_name：分析所用样品编号，具有相同该编号的数据将会合并；
+                            </p>
+                            <p>
+                                adapter：样品所用文库接头类型；
+                            </p>
+                            <p>
+                                library：文库；
+                            </p>
+                            <p>
+                                fq1：下机原始数据文件fastq1；
+                            </p>
+                            <p>
+                                fq2：下机原始数据文件fastq2；
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#sample_info'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:sample_info_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'sample', width: 160, title: 'sample_name', sort: true }
+            , { field: 'library', title: 'library' }
+            , { field: 'adapter', title: 'adapter' }
+            , { field: 'fq1', title: 'fq1' }
+            , { field: 'fq2', title: 'fq2' }
+
+        ]]
+    });
+
+</script>
+
+
+{%endblock%}

@@ -1,0 +1,3 @@
+Samples,synonymous,nonsynonymous,stopgain,stoploss,frameshift_insertion,frameshift_deletion,frameshift_block_substitution,nonframeshift_insertion,nonframeshift_deletion,nonframeshift_block_substitution,ExonicFunc_Unknown
+P002190812016,8342,7746,62,7,0,0,0,0,0,0,2859918
+P002190812017,8646,8080,70,8,0,0,0,0,0,0,2995490

@@ -1,0 +1,177 @@
+{%extends 'wgs/base.html'%}
+{%block bodycontent%}
+<div class="layui-fluid">
+    <div class="layui-container">
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                {% block background %}
+                <h1>测序数据质控</h1>
+                <p>
+                    Illumina测序属于第二代测序技术，单次运行能产生数百万级的Reads，如此海量的数据无法逐个展示每条Read的质量情况；运用统计学的方法，
+                    对所有测序Reads的每个Cycle进行碱基分布和质量波动的统计，可以从宏观上直观地反映出样本的测序质量和文库构建质量。
+                    我们针对每一个样本的原始测序数据进行测序相关质量评估，包括A/T/G/C碱基含量分布统计和碱基质量分布统计。
+                </p>
+                {% endblock %}
+            </div>
+            <div class="layui-col-xs12">
+                {% block parameter %}
+                <h3>参数设置</h3>
+                <p>质控软件：Fastp</p>
+                {% endblock %}
+            </div>
+            <div class="layui-col-xs12">
+                <div class="layui-tab layui-tab-brief">
+                    {%if message%}
+                    <p style="color: red">{{message}}</p>
+                    {%endif%}
+                    {% block tab %}
+                    <ul class="layui-tab-title">
+                        <li>测序数据统计</li>
+                        <li>碱基含量分布</li>
+                        <li>碱基质量分布</li>
+                    </ul>
+                    <div class="layui-tab-content">
+
+                        <div class="layui-tab-item layui-show">
+                            <table id="测序数据统计" class="layui-table" lay-filter="demo">
+
+                            </table>
+                        </div>
+                        <div id='碱基含量分布' class="layui-tab-item ">
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <form id='tab1_submit' class="layui-form" method='post' action="">
+                                        <select name='tab1' id='tab1' lay-filter='tab1'>
+                                            {% for key in dict_sub %}
+                                            <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{ csrf_input }}
+                                    </form>
+                                </div>
+
+
+                                <div class="layui-row layui-col-space20">
+                                    <div class="layui-col-md6">
+                                        <label class='tab1_sample_label1'>read1碱基含量分布图：</label>
+                                        <img class="tab1_img_1"
+                                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                                            src="read1.base_content.png" />
+                                    </div>
+                                    <div class="layui-col-md6">
+                                        <label class='tab1_sample_label2'>read2碱基含量分布图：</label>
+                                        <img class="tab1_img_2"
+                                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                                            src="read2.base_content.png" />
+                                    </div>
+                                    <div>
+                                        <p>注：左边代表同一个样本的read1碱基含量和GC分布图,右边代表对应的read2碱基含量和GC分布图。横坐标是Reads碱基坐标，表示Reads上从5’到3’端碱基的依次排列；纵坐标是所有Reads在该测序位置A、C、G、T、N碱基分别占的百分比，不同碱基用不同颜色表示。序列的起始位置与测序的引物接头相连，因此A、C、G、T在起始端会有所波动，后面会趋于稳定（受限制于测序策略，RAD等基于酶切手段测序该图波动较大）。模糊碱基N所占比例越低，说明未知碱基越少，测序样本受系统AT偏好影响越小。
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="碱基质量分布" class="layui-tab-item">
+                            <div class="layui-row">
+                                <div class="layui-col-xs12">
+                                    <form id='tab2_submit' class="layui-form" method='post' action="">
+                                        {{csrf_input}}
+                                        <select name='tab2' id='tab2' lay-filter='tab2'>
+                                            {% for key in dict_sub %}
+                                            <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </div>
+
+                                <div class="layui-row layui-col-space20">
+                                    <div class="layui-col-md6">
+                                        <label class='tab2_sample_label1'>read1碱基质量分布图：</label>
+                                        <img class="tab2_img_1"
+                                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                                            src="read1.base_quality.png" />
+                                    </div>
+                                    <div class="layui-col-md6">
+                                        <label class='tab2_sample_label2'>read2碱基质量分布图：</label>
+                                        <img class="tab2_img_2"
+                                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                                            src="read2.base_quality.png" />
+                                    </div>
+                                    <div>
+                                        <p>注：左边代表同一个样本的read1碱基质量分布图,右边代表对应的read2碱基质量分布图。横坐标是Reads碱基坐标位置，表示Reads上从5'到3'端依次碱基的排列；纵坐标是所有Reads在该位点处碱基的平均质量值。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#测序数据统计'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:qc_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', width: 160, title: 'Samples', sort: true }
+            , { field: 'Clean_total_reads', title: 'Clean_total_reads' }
+            , { field: 'Clean_total_bases', title: 'Clean_total_bases' }
+            , { field: 'Clean_q20_bases', title: 'Clean_q20_bases' }
+            , { field: 'Clean_q30_bases', title: 'Clean_q30_bases' }
+            , { field: 'Clean_q20_rate', title: 'Clean_q20_rate' }
+            , { field: 'Clean_q30_rate', title: 'Clean_q30_rate' }
+            , { field: 'Clean_read1_mean_length', title: 'Clean_read1_mean_length' }
+            , { field: 'Clean_read2_mean_length', title: 'Clean_read2_mean_length' }
+            , { field: 'Clean_gc_content', title: 'Clean_gc_content' }
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab1').val();
+    function tab1_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/qc/" + sample + "/read1.base_content.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/qc/" + sample + "/read2.base_content.png";
+        $('.tab1_img_1').attr('src', link1);
+        $('.tab1_img_2').attr('src', link2);
+        $('.tab1_sample_label1').text(sample + ' ' + 'read1碱基含量分布图：');
+        $('.tab1_sample_label2').text(sample + ' ' + 'read2碱基含量分布图：');
+    };
+    tab1_link(sample);
+    form.on('select(tab1)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    });
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab2').val();
+    function tab2_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/qc/" + sample + "/read1.base_quality.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/qc/" + sample + "/read2.base_quality.png";
+        $('.tab2_img_1').attr('src', link1);
+        $('.tab2_img_2').attr('src', link2);
+        $('.tab2_sample_label1').text(sample + ' ' + 'read1碱基质量分布图：');
+        $('.tab2_sample_label2').text(sample + ' ' + 'read2碱基质量分布图：');
+    };
+    tab2_link(sample);
+    form.on('select(tab2)', function (data) {
+        var sample = data.value;
+        tab2_link(sample);
+    })
+</script>
+{%endblock%}

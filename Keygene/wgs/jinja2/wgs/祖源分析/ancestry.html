@@ -1,0 +1,219 @@
+{% extends 'wgs/测序数据质控/qc.html' %}
+{% block background %}
+<h1>祖源分析</h1>
+<p>
+    人的每一次繁衍，都是通过DNA的传递来传承自己的遗传特征。在这个过程中，人类会通过减数分裂的方式产生配子，
+    减数分裂时同源重组现象会随机的将父母各自的染色体重新组合并传递给后代，完成遗传信息传递的同时，
+    也保证了后代的遗传多样性。在族群的演化过程中，这种信息传递过程会积累很多DNA的突变，被称为基因的多态性，
+    以单核苷酸多态性（SNP）为主。这些多态性因为不同族群演化历史不同，
+    都会有带有很强的族群特异性，可以被用来反映族群的遗传特征。
+</p>
+{%endblock%}
+{%block parameter%}
+<h3>分析软件</h3>
+<p>分析软件：Ypredict+HAPLOGREP+Admixture+Admixtools</p>
+{%endblock%}
+{% block tab %}
+<ul class="layui-tab-title">
+    <li class='layui-this'>父系单倍群</li>
+    <li>母系单倍群</li>
+    <li>祖源成分</li>
+    <li>尼安德特人比例</li>
+</ul>
+<div class="layui-tab-content">
+    <div id="父系单倍群" class="layui-tab-item layui-show">
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <h3 style='text-align: center;margin-bottom: 20px;'>父系Y单倍群</h3>
+                <p style="background-color: white;">
+                    Y染色体父子相传，分子人类学家通过Y染色体的变异特殊性，建立了Y染色体单倍群树。
+                    通过Y染色体单倍群预测结果，追踪父系的起源、演化和迁徙历史。
+                </p>
+            </div>
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab1' lay-filter='tab1'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <label class="tab1_sample_label">起源迁徙图：</label>
+                <img class='tab1_img'
+                    style="width:50%;margin-top: 25px;margin-bottom: 50px;margin-right: auto;margin-left: auto;display: block;"
+                    src="y_migrate.png" />
+
+            </div>
+        </div>
+    </div>
+    <div id="母系单倍群" class="layui-tab-item ">
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <h3 style='text-align: center;margin-bottom: 20px;'>母系MT单倍群</h3>
+                <p style="background-color: white;">
+                    线粒体（MT）一般只由母亲传给所有后代，分子人类学家通过线粒体DNA的变异特殊性，建立了MT单倍群树。
+                    通过MT单倍群预测结果，追踪母系的起源、演化和迁徙历史。
+                </p>
+            </div>
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab2' lay-filter='tab2'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <label class="tab2_sample_label">起源迁徙图：</label>
+                <img class='tab2_img'
+                    style="width:50%;margin-top: 25px;margin-bottom: 50px;margin-right: auto;margin-left: auto;display: block;"
+                    src="mt_migrate.png" />
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="祖源成分" class="layui-tab-item">
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <h3 style='text-align: center;margin-bottom: 20px;'>祖源成分</h3>
+                <p style="background-color: white;">
+                    以美国加州大学洛杉矶分校（UCLA）开发的 Admixture 祖源分析工具为原型开发了基于用户检测数据结合有监督的机器学习方法，
+                    通过比较常染色体 DNA 信息与数据库中的26个参考族群的相似性，
+                    可以精确计算样本的祖源成分。该检测的结果反映了样本和这26个参考族群的相似性。
+                </p>
+            </div>
+            <div class="layui-col-xs12">
+                <form name='tab3_form' id='tab3_form' class="layui-form">
+                    <select id='tab3' lay-filter='tab3'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                {{csrf_input}}
+                <input type='hidden' name='tab3_select' id='tab3_select'>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-md6">
+                <p>人群采样地点分布图：</p>
+                <img class="tab3_img1" style="width:80%;margin-top: 25px;margin-bottom: 50px;"
+                    src="/static/wgs/img/1000g_map.png" />
+
+            </div>
+            <div id='add_percent' class="layui-col-md6">
+                <p>post from ajax,just for funly</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="尼安德特人比例"" class=" layui-tab-item">
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <h3 style='text-align: center;margin-bottom: 20px;'>尼安德特人比例</h3>
+                <p style="background-color: white;">
+                    尼安德特人是一群生存于旧石器时代的史前人类，1856
+                    年，其遗迹首先在德国尼安德河谷被发现。目前按照国际科学分类二名法归类为人科人属，至于是否为独立物种还是智人的亚种则一直不确定，随着2010年的研究发现部分现代人是其混血后代后，也可能被归类于智人下的一个亚种。
+                </p>
+                <hr>
+                <p style="background-color: white;">该分析使用了美国哈佛大学开发的 AdmixTools 祖源分析工具包，通过比较样本的检测结果与尼安德特人的基因组测序结果，可以计算样本基因中尼安德特人成分比例。</p>
+            </div>
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab4' lay-filter='tab4'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-md6">
+                <p>尼安德特人复原图：</p>
+                <img class="tab4_img" style="width:80%;margin-top: 25px;margin-bottom: 50px;"
+                    src="/static/wgs/img/neanderthal.jpg" />
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-col-md6">
+                    <div id='add_neanderthal'>
+                        <p>post from ajax,just for funly</p>
+                    </div>
+                    <hr>
+                    <p>研究发现，除非洲人外的现代人与尼安德特人拥有1%—4%的共同基因。对于现代非洲人身上没有任何尼安德特人的基因，科学家认为，大约10万年至5万年前，现代人的一支走出非洲，在中东地区与尼安德特人发生过混血，其后代其后代散居在欧洲、亚洲、美洲、大洋洲各地。而留在非洲的现代人便是现在非洲人的祖先。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{%block js%}
+<script>
+    var $ = layui.jquery, form = layui.form, element = layui.element;
+    function tab4(){
+        var sample = $('#tab4').val();
+        $.ajax({
+            url: "{{url('wgs:neanderthal_test',args=(analysis,))}}",
+            type: "POST",
+            async: true,
+            dataType: 'html',
+            data: { 'sample': sample },
+            cache: false,//ie may crash
+            success: function (html) {
+                $('#add_neanderthal').html(html);
+            },
+            error: function () {
+                alert('无数据，不展示');
+            }
+
+        });
+    };
+    tab4();
+    form.on('select(tab4)', function () {
+        tab4();
+    })
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form, element = layui.element;
+    function tab3(){
+        var sample = $('#tab3').val();
+        $.ajax({
+            url: "{{url('wgs:ancestry_test',args=(username,project,analysis))}}",
+            type: "POST",
+            async: true,
+            dataType: 'text',
+            data: { 'sample': sample },
+            cache: false,//ie may crash
+            success: function (html) {
+                $('#add_percent').html(html);
+                element.render('collapse');
+            },
+            error: function () {
+                alert('无数据，不展示');
+
+            }
+
+        });
+    };
+    tab3();
+    form.on('select(tab3)', function () {
+        
+        tab3();
+    })
+
+</script>
+{%endblock%}

@@ -1,0 +1,43 @@
+from django.urls import path
+
+from . import views
+
+app_name='wgs'
+urlpatterns = [
+    path('index/<username>/<project>/<analysis>/', views.Index().index, name='我的分析'),
+    path('index/项目背景/', views.Introduction().background, name='项目背景'),
+    path('index/<username>/<project>/<analysis>/项目背景/结果概述/', views.Introduction().general_stat, name='结果概述'),
+    path('index/<username>/<project>/<analysis>/项目背景/样本信息/', views.Introduction().sample_info, name='样本信息'),
+    path('index/sample_info/<analysis>/', views.Introduction().sample_info_table, name='sample_info_table'),
+    path('index/software_table/<analysis>/', views.Introduction().software_table, name='software_table'),
+    path('index/项目背景/软件列表/', views.Introduction().software, name='软件列表'),
+    path('index/测序数据质控/', views.Data_qc().background, name='测序数据质控'),
+    path('index/<username>/<project>/<analysis>/测序数据质控/测序数据统计/', views.Data_qc().qc, name='测序数据统计'),
+    path('index/qc/<analysis>/', views.Data_qc().qc_table, name='qc_table'),
+    path('index/基因组比对/', views.BWA_mem().background, name='基因组比对'),
+    path('index/<username>/<project>/<analysis>/基因组比对/比对信息统计/', views.BWA_mem().mapping_stat, name='比对信息统计'),
+    path('index/mapping/<analysis>/', views.BWA_mem().mapping_table, name='mapping_table'),
+    path('index/祖源分析/', views.Ancestry().background, name='祖源分析'),
+    path('index/<username>/<project>/<analysis>/祖源分析/祖源成分/', views.Ancestry().ancestry_percent, name='祖源成分'),
+    path('index/ancestry_test/<username>/<project>/<analysis>/', views.Ancestry().ancestry_test, name='ancestry_test'),
+    path('index/neanderthal_test/<analysis>/', views.Ancestry().neanderthal_test, name='neanderthal_test'),
+    path('index/短变异位点检测/', views.SNV().background, name='短变异位点检测'),
+    path('index/<username>/<project>/<analysis>/短变异位点检测/短变异位点统计/', views.SNV().variant_stat, name='短变异位点统计'),
+    path('index/snp_table/<analysis>/', views.SNV().snp_table, name='snp_table'),
+    path('index/indel_table/<analysis>/', views.SNV().indel_table, name='indel_table'),
+    path('index/snp_func_table/<analysis>/', views.SNV().snp_func_table, name='snp_func_table'),
+    path('index/indel_func_table/<analysis>/', views.SNV().indel_func_table, name='indel_func_table'),
+    path('index/SV变异检测/', views.SV().background, name='SV变异检测'),
+    path('index/<username>/<project>/<analysis>/SV变异检测/SV变异统计/', views.SV().sv_stat, name='SV变异统计'),
+    path('index/sv_table/<analysis>/', views.SV().sv_table, name='sv_table'),
+    path('index/CNV变异检测/', views.CNV().background, name='CNV变异检测'),
+    path('index/<username>/<project>/<analysis>/CNV变异检测/CNV变异统计/', views.CNV().cnv_stat, name='CNV变异统计'),
+    path('index/cnv_table/<analysis>/', views.CNV().cnv_table, name='cnv_table'),
+    path('index/标记分布可视化/', views.Marker().background, name='标记分布可视化'),
+    path('index/<username>/<project>/<analysis>/标记分布可视化/标记位点染色体分布/', views.Marker().density, name='标记位点染色体分布'),
+    path('index/基因功能注释/', views.Annotation().background, name='基因功能注释'),
+    path('index/<username>/<project>/<analysis>/基因功能注释/denovo注释/', views.Annotation().denovo_annotation, name='denovo注释'),
+    path('index/<username>/<project>/<analysis>/基因功能注释/基因富集分析/', views.Annotation().pathway, name='基因富集分析'),
+    path('index/go_pathway/<username>/<project>/<analysis>/<sample>/', views.Annotation().go_pathway_table),
+    path('index/kegg_pathway/<username>/<project>/<analysis>/<sample>/', views.Annotation().kegg_pathway_table),
+]

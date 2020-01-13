@@ -1,0 +1,14 @@
+<p>{{sample}}:</p>
+<div style="margin-top:25px;" class="layui-collapse" lay-accordion>
+    {%for continent in pop%}
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">{{continent[0]}}</h2>
+        <div class="layui-colla-content">
+            {%for region in continent[1]%}
+            <p>{{population_country[region[0]]}}: {{region[1]}}</p>
+            {%endfor%}
+        </div>
+    </div>
+    {%endfor%}
+</div>
+

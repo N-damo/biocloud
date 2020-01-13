@@ -1,0 +1,282 @@
+{% extends 'wgs/测序数据质控/qc.html' %}
+{%block background%}
+<h1>变异位点数据统计</h1>
+<p>
+    统计各样本基因组比对得到短变异（SNP,InDel）的数量、类型、质量参数、标记密度及插入/缺失片段的长度分布等。
+</p>
+{%endblock%}
+{% block parameter %}
+<h3>分析软件</h3>
+<p>分析软件：Sentieon</p>
+{%endblock%}
+
+{%block tab%}
+<ul class="layui-tab-title">
+    <li class='layui-this'>变异位点数据统计</li>
+    <li>变异位点质量评估</li>
+    <li>变异位点功能信息统计</li>
+</ul>
+<div class="layui-tab-content">
+    <div id="变异位点数据统计" class="layui-tab-item layui-show">
+        <div style='text-align: center;'>
+            <form class="layui-input-block">
+                <input type="radio" value="snp" name="variant" lay-filter='variant_stat' title='SNP' checked>
+                <input type="radio" value="indel" name="variant" lay-filter='variant_stat' title='INDEL'>
+            </form>
+        </div>
+        <div id='snp'>
+            <table id='snp_table' class="layui-table"></table>
+        </div>
+        <div id='indel'>
+            <table id='indel_table' class="layui-table"></table>
+        </div>
+    </div>
+    <div id="变异位点质量评估" class="layui-tab-item ">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab1' lay-filter='tab1'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-md6">
+                <label class="sample_label1">SNP变异位点质量分布图：</label>
+                <img class='tab1_img1' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="depth_acumulative.png" />
+                <p>注：横坐标是对应SNP/InDel分型累计质量分布值（变异检测结果的可靠度）；纵坐标是某一质量值以下所有SNP/InDel所占百分比。</p>
+            </div>
+            <div class="layui-col-md6">
+                <label class="sample_label2">SNP变异位点深度分布图：</label>
+                <img class='tab1_img2' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="quality_acumulative.png" />
+                <p>注：横坐标是对应SNP/InDel标记的覆盖深度；纵坐标是某一深度以下所有SNP/InDel所占百分比。</p>
+            </div>
+            <div class="layui-col-md6">
+                <label class="sample_label3">INDEL变异位点质量分布图：</label>
+                <img class='tab1_img3' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="depth_acumulative.png" />
+                <p>注：横坐标是对应SNP/InDel分型累计质量分布值（变异检测结果的可靠度）；纵坐标是某一质量值以下所有SNP/InDel所占百分比。</p>
+            </div>
+            <div class="layui-col-md6">
+                <label class="sample_label4">INDEL变异位点深度分布图：</label>
+                <img class='tab1_img4' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="quality_acumulative.png" />
+                <p>注：横坐标是对应SNP/InDel标记的覆盖深度；纵坐标是某一深度以下所有SNP/InDel所占百分比。</p>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div id="变异位点功能信息统计" class="layui-tab-item">
+        <div id='variant_select'>
+            <input type="radio" value="snp" name='variant' lay-filter='variant_check' title='SNP' checked>
+            <input type="radio" value="indel" name='variant' lay-filter='variant_check' title='INDEL'>
+        </div>
+        <div id='snp_func'>
+            <label>SNP Function</label>
+            <table id='snp_func_table' class="layui-table"></table>
+        </div>
+        <div id='indel_func'>
+            <label>INDEL Function</label>
+            <table id='indel_func_table' class="layui-table"></table>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#snp_table'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:snp_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', title: 'Samples', sort: true }
+            , { field: 'Total_SNPs', title: 'Total_SNPs' }
+            , { field: 'Missing_genotype', title: 'Missing_genotype' }
+            , { field: 'Homozygous', title: 'Homozygous' }
+            , { field: 'Heterozygous', title: 'Heterozygous' }
+            , { field: 'Ti', title: 'Ti' }
+            , { field: 'Tv', title: 'Tv' }
+            , { field: 'TivsTv', title: 'Ti/Tv' }
+            , { field: 'Intergenic', title: 'Intergenic' }
+            , { field: 'Intronic', title: 'Intronic' }
+            , { field: 'Exonic', title: 'Exonic', sort: true }
+            , { field: 'Splicing', title: 'Splicing' }
+            , { field: 'ncRNA', title: 'ncRNA' }
+            , { field: 'Downstream', title: 'Downstream' }
+            , { field: 'Upstream', title: 'Upstream' }
+            , { field: 'UTR3', title: 'UTR3' }
+            , { field: 'UTR5', title: 'UTR5' }
+            , { field: 'Unknown', title: 'Unknown' }
+
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#indel_table'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:indel_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', title: 'Samples', sort: true }
+            , { field: 'Total_INDELs', title: 'Total_INDELs' }
+            , { field: 'Missing_genotype', title: 'Missing_genotype' }
+            , { field: 'Homozygous', title: 'Homozygous' }
+            , { field: 'Heterozygous', title: 'Heterozygous' }
+            , { field: 'Intergenic', title: 'Intergenic' }
+            , { field: 'Intronic', title: 'Intronic' }
+            , { field: 'Exonic', title: 'Exonic', sort: true }
+            , { field: 'Splicing',title: 'Splicing' }
+            , { field: 'ncRNA', title: 'ncRNA' }
+            , { field: 'Downstream', title: 'Downstream' }
+            , { field: 'Upstream', title: 'Upstream' }
+            , { field: 'UTR3', title: 'UTR3' }
+            , { field: 'UTR5', title: 'UTR5' }
+            , { field: 'Unknown', title: 'Unknown' }
+
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#snp_func_table'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:snp_func_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', title: 'Samples', sort: true }
+            , { field: 'synonymous', title: 'synonymous' }
+            , { field: 'nonsynonymous', title: 'nonsynonymous' }
+            , { field: 'stopgain', title: 'stopgain' }
+            , { field: 'stoploss', title: 'stoploss' }
+            , { field: 'frameshift_insertion', title: 'frameshift_insertion' }
+            , { field: 'frameshift_deletion', title: 'frameshift_deletion' }
+            , { field: 'frameshift_block_substitution', title: 'frameshift_block_substitution' }
+            , { field: 'nonframeshift_insertion', title: 'nonframeshift_insertion' }
+            , { field: 'nonframeshift_deletion', title: 'nonframeshift_deletion' }
+            , { field: 'nonframeshift_block_substitution', title: 'nonframeshift_block_substitution', sort: true }
+            , { field: 'ExonicFunc_Unknown', title: 'ExonicFunc_Unknown' }
+
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#indel_func_table'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:indel_func_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', title: 'Samples', sort: true }
+            , { field: 'synonymous', title: 'synonymous' }
+            , { field: 'nonsynonymous', title: 'nonsynonymous' }
+            , { field: 'stopgain', title: 'stopgain' }
+            , { field: 'stoploss', title: 'stoploss' }
+            , { field: 'frameshift_insertion', title: 'frameshift_insertion' }
+            , { field: 'frameshift_deletion', title: 'frameshift_deletion' }
+            , { field: 'frameshift_block_substitution', title: 'frameshift_block_substitution' }
+            , { field: 'nonframeshift_insertion', title: 'nonframeshift_insertion' }
+            , { field: 'nonframeshift_deletion', title: 'nonframeshift_deletion' }
+            , { field: 'nonframeshift_block_substitution', title: 'nonframeshift_block_substitution', sort: true }
+            , { field: 'ExonicFunc_Unknown', title: 'ExonicFunc_Unknown' }
+
+        ]]
+    });
+
+</script>
+<script>
+    function shortvariant_stat() {
+        var form = layui.form, $ = layui.jquery;
+        $('#snp').show();
+        $('#indel').hide();
+        form.on('radio(variant_stat)', function (data) {
+            if (data.value == 'snp') {
+                $('#snp').show();
+                $('#indel').hide();
+            }
+            else {
+                $('#snp').hide();
+                $('#indel').show();
+            }
+        })
+    };
+    shortvariant_stat();
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab1').val();
+    function tab1_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/depth_acumulative.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/quality_acumulative.png";
+        var link3 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/depth_acumulative.png";
+        var link4 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/quality_acumulative.png";
+        $('.sample_label1').text(sample + ' ' + "SNP变异位点质量分布图：");
+        $('.sample_label2').text(sample + ' ' + "SNP变异位点深度分布图：");
+        $('.sample_label3').text(sample + ' ' + "INDEL变异位点质量分布图：");
+        $('.sample_label4').text(sample + ' ' + "INDEL变异位点深度分布图：");
+        $('.tab1_img1').attr('src', link1);
+        $('.tab1_img2').attr('src', link2);
+        $('.tab1_img3').attr('src', link3);
+        $('.tab1_img4').attr('src', link4);
+
+    };
+    tab1_link(sample);
+    form.on('select(tab1)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    })
+</script>
+<script>
+
+    function shortvariant_func() {
+        var form = layui.form, $ = layui.jquery;
+        form.render();
+        $('#snp_func').show();
+        $('#indel_func').hide();
+        form.on('radio(variant_check)', function (data) {
+            if (data.value == 'snp') {
+                $('#snp_func').show();
+                $('#indel_func').hide();
+            }
+            else {
+                $('#snp_func').hide();
+                $('#indel_func').show();
+            }
+        })
+    }
+
+    shortvariant_func();
+</script>
+{%endblock%}

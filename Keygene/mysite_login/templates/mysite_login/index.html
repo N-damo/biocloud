@@ -1,0 +1,20 @@
+{% extends 'mysite_login/base.html' %}
+{% block title %}主页{% endblock %}
+{% block content %}
+<div class="layui-carousel" id="test1" style="top:50px;margin-bottom: 100px;">
+  <div carousel-item="" style="text-align: center;">
+    <div><img src="/static/mysite_login/img/1.jpg" style="width: 50%"></div>
+    <div><img src="/static/mysite_login/img/2.jpg" style="width: 50%"></div>
+    <div><img src="/static/mysite_login/img/3.jpg" style="width: 50%"></div>
+    <div><img src="/static/mysite_login/img/4.jpg" style="width: 50%"></div>
+  </div>
+</div>
+<div id='pipeline' style="margin-bottom:100px;"></div>
+{% endblock %}
+{%block js%}
+<script>
+  var $ = layui.jquery;
+  $('#pipeline').load('/static/item.html');
+</script>
+<script>carouse();</script>
+{%endblock%}

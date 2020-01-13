@@ -1,0 +1,139 @@
+{% extends 'wgs/测序数据质控/qc.html'%}
+{%block background%}
+<h1>标记位点染色体分布</h1>
+<p>
+    对所有的标记信息进行分类统计，依染色体顺序，绘制标记在基因组上的密度分布情况。
+</p>
+{%endblock%}
+{%block parameter%}
+<h3>分析软件</h3>
+<p>分析软件：Circos+Matplotlib</p>
+{%endblock%}
+
+{%block tab%}
+<ul class="layui-tab-title">
+    <li class='layui-this'>标记位点染色体分布</li>
+    <li>Circos圈图展示</li>
+</ul>
+<div class="layui-tab-content">
+    <div id="标记位点染色体分布" class="layui-tab-item layui-show">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab1' lay-filter='tab1'>
+                        {% for key in dict_sub %}
+                        <option value={{key}} name={{key}} selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="layui--col-xs12">
+
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-md6">
+                        <label class="sample_label1">SNP标记位点染色体分布：</label>
+                        <img class="tab1_img1"
+                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px;margin-left: 50px;"
+                            alt='无数据，不展示' src="SNP_marker_density.png" />
+                    </div>
+                    <div class="layui-col-md6">
+                        <label class="sample_label2">INDEL标记位点染色体分布：</label>
+                        <img class="tab1_img2"
+                            style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px;margin-left: 50px;"
+                            alt='无数据，不展示' src="INDEL_marker_density.png" />
+                    </div>
+                    <div class='layui-col-xs12'>
+                        <p>注：
+                            横坐标为22条常染色体和XY性染色体,纵坐标代表染色体窗口(染色体窗口数X窗口大小=染色体大小)，不同色块颜色代表不同normalised标记数量。左右分别为SNP/INDEL标记分布热图
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+    <div id="Circos圈图展示" class="layui-tab-item ">
+        <div class="layui-row ">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab2' lay-filter='tab2'>
+                        {% for key in dict_sub %}
+                        <option value={{key}} name={{key}} selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    <label class="sample_label1">SNP标记位点染色体分布：</label>
+                    <img class="tab2_img1"
+                        style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px;margin-left: 50px;"
+                        alt='无数据，不展示'
+                        src="_SNP.circos.png" />
+                </div>
+                <div class="layui-col-md6">
+                    <label class="sample_label2">INDEL标记位点染色体分布：</label>
+                    <img class="tab2_img2"
+                        style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px;margin-left: 50px;"
+                        alt='无数据，不展示'
+                        src="_INDEL.circos.png" />
+                </div>
+                <div class='layui-col-xs12'>
+                    <p>注：
+                        横坐标为22条常染色体和XY性染色体,纵坐标代表染色体窗口(染色体窗口数X窗口大小=染色体大小)，不同色块颜色代表不同normalised标记数量。左右分别为SNP/INDEL标记分布热图
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>
+
+
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab1').val();
+    function tab1_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/SNP_marker_density.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/INDEL_marker_density.png";
+        $('.sample_label1').text(sample + ' ' + "SNP标记位点染色体分布：");
+        $('.sample_label2').text(sample + ' ' + "INDEL标记位点染色体分布：");
+        $('.tab1_img1').attr('src', link1);
+        $('.tab1_img2').attr('src', link2);
+    }
+    tab1_link(sample);
+    form.on('select(tab1)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    })
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab2').val();
+    function tab2_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/"+sample+"_SNP.circos.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/"+sample+"_INDEL.circos.png";
+        $('.sample_label1').text(sample + ' ' + "SNP标记位点染色体分布：");
+        $('.sample_label2').text(sample + ' ' + "INDEL标记位点染色体分布：");
+        $('.tab2_img1').attr('src', link1);
+        $('.tab2_img2').attr('src', link2);
+    }
+    tab2_link(sample);
+    form.on('select(tab2)', function (data) {
+        var sample = data.value;
+        tab2_link(sample);
+    })
+</script>
+{%endblock%}

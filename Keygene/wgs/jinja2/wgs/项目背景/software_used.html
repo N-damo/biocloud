@@ -1,0 +1,45 @@
+{%extends 'wgs/base.html'%}
+{%block bodycontent%}
+    <div class="layui-fluid">
+        <div class="layui-container">
+            <div class="layui-row layui-col-space20">
+                <div class="layui-col-xs12">
+                    <h1>软件列表</h1><p>
+                        包含该分析项目中，生信部分所用软件信息。
+                    </p>
+                </div>
+                <div class="layui-col-xs12">
+                    <div class="layui-row layui-col-space20">
+                        <div class="layui-col-xs12">
+                            <table id="software" class="layui-table" lay-filter="demo">
+                                
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+{%block js%}
+
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#software'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:software_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', width:80,sort: true}
+            , { field: 'item', width: 160, title: 'item', sort: true }
+            , { field: 'tool', title: 'tool' }
+            , { field: 'version', title: 'version' }
+            , { field: 'parameter', title: 'parameter' }
+        ]]
+    });
+
+</script>
+{%endblock%}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>wgs</title>
+    <link rel="stylesheet" type="text/css" href="/static/wgs/css/style.css" />
+
+    {%block css%}{%endblock%}
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css" />
+</head>
+
+<body class="layui-form" style="overflow-x:hidden;background-color:#eee">
+
+
+    {%block bodycontent%}
+
+    {%endblock%}
+    <script src="/static/layui/layui.all.js"></script>
+    <script src='/static/js/jquery-3.4.1.js'></script>
+    <script>
+        var table = layui.table;
+        table.init('demo', { height: 500, cellMinWidth: 80, limit: 10, toolbar: true, page: true, defaultToolbar: ['filter', 'exports'], });
+        table.render();
+    </script>
+    {%block js%}
+    {%endblock%}
+</body>

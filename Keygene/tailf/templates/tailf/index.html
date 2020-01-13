@@ -1,0 +1,29 @@
+{% extends "mysite_login/base.html" %}
+
+{% block content %}
+<div class="layui-container" style="top:50px;">
+  <div class="layui-row layui-col-space20">
+    <div class="layui-col-md9">
+      <select class="form-control" id="file">
+        <option value="">选择要监听的日志</option>
+        <option value="{{analysis}}">{{ analysis }}</option>
+      </select>
+    </div>
+    <div class="layui-col-md1">
+      <button class="layui-btn layui-btn-primary" type="button" onclick="connect()" >开始监听</button><br/>
+    </div>
+    <div class="layui-col-md1">
+      <button class="layui-btn layui-btn-primary" type="button" onclick="goclose()" >终止监听</button><br/>
+    </div>
+  </div>
+  <div class="layui-col-xs12">
+    <textarea id="chat-log" class="layui-textarea" style="height:500px;"></textarea>
+  </div>
+</div>
+{% endblock %}
+{%block js%}
+<script src='/static/tailf/js/log.js'></script>
+<script src='/static/tailf/js/toastr.min.js'></script>
+<script>connect();</script>
+<script>goclose();</script>
+{%endblock%}

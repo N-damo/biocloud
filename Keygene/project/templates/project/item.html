@@ -1,0 +1,36 @@
+{% extends 'project/base.html' %}
+{%block css%}
+<link rel='stylesheet' href='/static/project/css/item.css' />{%endblock%}
+{% block title %}item列表{% endblock %}
+{%block content%}
+<div id='pipeline' style='margin-bottom: 100px;'></div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery;
+    $('#pipeline').load('/static/item.html');
+</script>
+<script>
+    function get_item(obj) {
+        var $ = layui.jquery, layer = layui.layer;
+        var value = $(obj).attr('value');
+        // var index = parent.layer.getFrameIndex(window.name);
+        layer.confirm(value + '?', { icon: 3, title: '提示' },
+            function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.$('#childvalue').val(value);
+                parent.layer.msg('您已选择流程：' + value);
+                parent.layer.close(index);
+            },
+            function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.msg('您还未选择分析流程');
+                parent.$('#childvalue').val('');
+                parent.layer.close(index);
+
+            }
+        );
+    }
+</script>
+
+{%endblock%}

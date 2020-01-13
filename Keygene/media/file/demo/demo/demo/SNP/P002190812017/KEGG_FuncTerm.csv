@@ -1,0 +1,3 @@
+source,native,name,p_value,significant,description,term_size,query_size,intersection_size,effective_domain_size,precision,recall,query,parents
+KEGG,KEGG:05200,Pathways in cancer,0.002942994970298219,True,Pathways in cancer,528,6942,497,7772,0.07159320080668395,0.9412878787878788,query_1,['KEGG:00000']
+KEGG,KEGG:04144,Endocytosis,0.008731230171308614,True,Endocytosis,243,6942,233,7772,0.03356381446269087,0.9588477366255144,query_1,['KEGG:00000']

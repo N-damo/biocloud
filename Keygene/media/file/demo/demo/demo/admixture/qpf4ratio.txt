@@ -1,0 +1,3 @@
+A B X C O alpha stderr Zscore
+Denisova Neanderthal P002190812016 Yoruba Chimp 0.030198 0.00781 3.867
+Denisova Neanderthal P002190812017 Yoruba Chimp 0.019269 0.007318 2.633

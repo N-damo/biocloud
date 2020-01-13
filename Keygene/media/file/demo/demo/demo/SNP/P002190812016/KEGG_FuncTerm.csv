@@ -1,0 +1,4 @@
+source,native,name,p_value,significant,description,term_size,query_size,intersection_size,effective_domain_size,precision,recall,query,parents
+KEGG,KEGG:04144,Endocytosis,0.0015534716231196239,True,Endocytosis,243,6866,233,7772,0.033935333527526944,0.9588477366255144,query_1,['KEGG:00000']
+KEGG,KEGG:05200,Pathways in cancer,0.019317639059159078,True,Pathways in cancer,528,6866,490,7772,0.07136615205359743,0.928030303030303,query_1,['KEGG:00000']
+KEGG,KEGG:05165,Human papillomavirus infection,0.02157635490536515,True,Human papillomavirus infection,330,6866,310,7772,0.04515001456452083,0.9393939393939394,query_1,['KEGG:00000']

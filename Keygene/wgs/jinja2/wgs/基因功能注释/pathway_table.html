@@ -1,0 +1,43 @@
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th lay-data={align:"center",width:150,sort:true,field:"sample"}>sample</th>
+            {%for col in go_snp_dict_sub[sample]%}
+            <th lay-data={align:"center",width:150,sort:true,field:"{{col[0]}}"}>{{col[0]}}
+            </th>
+            {%endfor%}
+        </tr>
+    </thead>
+    <tbody>
+        {% for key in go_snp_dict_sub %}
+        <tr>
+            <td>{{ key }}</td>
+            {%for col in go_snp_dict_sub[key]%}
+            <td>{{ col[1]}}</td>
+            {%endfor%}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th lay-data={align:"center",width:150,sort:true,field:"sample"}>sample</th>
+            {%for col in go_indel_dict_sub[sample]%}
+            <th lay-data={align:"center",width:150,sort:true,field:"{{col[0]}}"}>{{col[0]}}
+            </th>
+            {%endfor%}
+        </tr>
+    </thead>
+    <tbody>
+        {% for key in go_indel_dict_sub %}
+        <tr>
+            <td>{{ key }}</td>
+            {%for col in go_indel_dict_sub[key]%}
+            <td>{{ col[1]}}</td>
+            {%endfor%}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

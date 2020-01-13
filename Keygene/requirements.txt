@@ -1,0 +1,11 @@
+django==2.2
+pandas==0.25.3
+jinja2==2.10.3 
+pymysql==0.9.3
+redis==3.3.11
+django-simple-captcha==0.5.12
+channels==2.4.0
+channels_redis==2.4.1
+peewee==3.13.1
+uwsgi==2.0.18
+celery==4.4.0

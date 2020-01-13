@@ -1,0 +1,65 @@
+{% extends 'project/base.html' %}
+{%load static%}
+{% block title %}分析列表{% endblock %}
+{%block content%}
+
+<div class="layui-container"
+    style="overflow:auto !important;margin-top:5%;width:1000px;height:500px;background-color: white;">
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-xs12">
+            <form action="{%url 'project:我的分析' username=username project=project%}" method="post">
+
+                {%if message%}
+                <div class="alert alert-warning">{{ message }}</div>
+                {%endif%}
+                {% csrf_token %}
+                <div class="layui-input-inline">
+                    <button lay-submit class="layui-btn">新建分析</button>
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" type='text' name='new_analysis' placeholder='请输入新分析名称'>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-xs12">
+            <div class="layui-col-md6" style="text-align:left;font-weight: bold;font-size: 15px;">
+                <p>任务名称</p>
+            </div>
+            <div class="layui-col-md6" style="text-align:right;font-weight: bold;font-size: 15px;">
+                <p>操作</p>
+            </div>
+        </div>
+        <hr class="layui-bg-blue">
+        {%for analysis in user_analysis%}
+        <div class="layui-col-xs12">
+            <div class="layui-col-md6">
+                <i class="layui-icon layui-icon-file-b" style="margin-right:10px;font-size:30px;color:skyblue"></i>
+                <a href="#" style="color: #01AAED;font-size: 30px">{{analysis.batch}}</a>
+                <P style="font-size: 15px">创建人：{{username}}</P>
+                <P style="font-size: 15px">创建时间：{{analysis.c_time}}</P>
+            </div>
+            <div class="layui-col-md6">
+                <form class='delete_form'
+                    action="{%url 'project:删除分析' username=username project=project analysis=analysis%}" method="post">
+                    {%csrf_token%}
+                    <input type='hidden' name='{{analysis.batch}}' id='{{analysis.batch}}' value="{{analysis.batch}}">
+                    <button title='删除该项分析' class="layui-btn layui-btn-radius layui-btn-primary delete" layui-submit
+                        style="float:right"><i class="layui-icon layui-icon-delete"></i></button>
+                </form>
+                <a href="{%url 'wgs:我的分析' username=username project=project analysis=analysis%}" title='进入交互分析'
+                    class="layui-btn layui-btn-radius layui-btn-primary" style="float:right">交互分析</a>
+                <a href="{%url 'project:交互分析表单' username=username project=project analysis=analysis%}" title='点击我建立分析表单'
+                    class="layui-btn layui-btn-radius layui-btn-primary" style="float:right"><i
+                    class="layui-icon layui-icon-set"></i></a>
+                <a title='查看分析进度' class="layui-btn layui-btn-radius layui-btn-primary"
+                    href="{%url 'tailf:tailf-url' analysis=analysis %}" style="float:right">监听日志</a>
+                <!--监听日志 -->
+            </div>
+        </div>
+
+        {%endfor%}
+    </div>
+
+</div>
+
+{%endblock%}

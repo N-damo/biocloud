@@ -1,0 +1,9 @@
+.layui-card-body {
+    height:200px;
+    text-indent: 30px;
+   
+}
+.layui-card-header {
+    font-size:15px;
+    font-weight: bold;
+}

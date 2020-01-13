@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}base{% endblock %}</title>
+  <link href="/static/layui/css/layui.css" rel="stylesheet">
+
+  {% block css %}{% endblock %}
+</head>
+
+<body class="layui-form" style="background-color:#eee;height:100%">
+  <div style="padding-bottom:100px;">
+
+    <ul class="layui-nav layui-bg-blue" style="text-align:right">
+      {% if request.session.is_login %}
+      <li class="layui-nav-item layui-this"><a href="/index/">主页</a></li>
+      <li class="layui-nav-item "><a href="{%url 'project:我的项目' request.session.user_name%}">国脉生物云</a></li>
+      <li class="layui-nav-item "><a href="{%url 'chat:index'%}">聊天室</a></li>
+      <li class="layui-nav-item "><a href="mailto:guomaigene@gmit.com">反馈</a></li>
+      <li class="layui-nav-item"><a href="/logout/">登出</a></li>
+      <li class="layui-nav-item"><a href="/index/">当前在线：{{ request.session.user_name }}</a></li>
+      {% else %}
+      <li class="layui-nav-item"><a href="/login/">登录</a></li>
+      <li class="layui-nav-item"><a href="/register/">注册</a></li>
+      <li class="layui-nav-item layui-this"><a href="mailto:guomaigene@gmit.com">反馈</a></li>
+      <li class="layui-nav-item"><a href="#">你尚未登录，只能访问公开内容！</a></li>
+      {% endif %}
+    </ul>
+    {%if message%}
+    <div class="alert alert-warning">{{message}}</div>
+    {%endif%}
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  
+  <footer style='text-align: center;width:100%;height:50px;background-color: #2F4056;color: white;font-size: 15px;'>
+    国脉生物科技有限公司</footer>
+  <script src="/static/layui/layui.all.js"></script>
+  <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+  <script src="/static/js/jquery-3.4.1.js"></script>
+  <script src="/static/mysite_login/js/foot.js"></script>
+  <script>footer_bottom();</script>
+  {%block js%}{%endblock%}
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+{%extends 'wgs/测序数据质控/qc.html' %}
+{%block background%}
+<h1>基因功能注释</h1>
+<p>全基因组测序将产生大量数据，此前普遍采用比对方法对对预测出来的编码基因进行功能注释，通过与各种功能数据库（NR、Swiss-Prot
+    、GO、KOG、KEGG）进行蛋白质比对，获取该基因的功能信息。其中GO和KEGG数据库分别在基因功能和代谢通路研究中占据重要地位。</p>
+{%endblock%}
+{%block parameter%}
+<h3>分析软件</h3>
+<p>分析软件：go:Profiler</p>
+{%endblock%}
+{%block tab%}
+<ul class="layui-tab-title">
+    <li class='layui-this'>GO分类统计</li>
+    <li>GO分类直方图</li>
+    <li>KEGG分类统计</li>
+    <li>KEGG分类直方图</li>
+</ul>
+<div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+        <form class="layui-form">
+            <select id='tab1' lay-filter='tab1'>
+                {% for key in dict_sub %}
+                <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                {% endfor %}
+            </select>
+
+        </form>
+
+        <table class="layui-hide" id='GO分类统计'></table>
+        <p>注：默认只展示SNP的前10个GO统计结果</p>
+    </div>
+
+
+    <div id='GO分类直方图' class="layui-tab-item">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab2' lay-filter='tab2'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+
+            <div class="layui-row layui-col-space20">
+
+                <div class="layui-col-md6">
+                    <label class="sample_label1">SNP GO分类直方图：</label>
+                    <img class='tab2_img1' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                        src="/media/{{username}}/{{project}}/{{analysis}}/SNP/{{key}}/GO_FuncTerm.png" />
+                </div>
+                <div class="layui-col-md6">
+                    <label class="sample_label1">INDEL GO分类直方图：</label>
+                    <img class='tab2_img2' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                        src="/media/{{username}}/{{project}}/{{analysis}}/INDEL/{{key}}/GO_FuncTerm.png" />
+                </div>
+                <div class="layui-col-xs12">
+                    <p>注：纵坐标表示GO数据库通路类型以及分类ID编号；横坐标表示所选区域内该分类下-log10(P_value)值，越大表示富集越显著。默认展示前20位GO ID的统计信息。</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-tab-item">
+
+        <form class="layui-form">
+            <select id='tab3' lay-filter='tab3'>
+                {% for key in dict_sub %}
+                <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                {% endfor %}
+            </select>
+
+        </form>
+
+        <table class="layui-hide" id='KEGG分类统计'></table>
+        <p>注：默认只展示SNP的前10个KEGG统计结果</p>
+
+    </div>
+
+    <div id='KEGG分类直方图' class="layui-tab-item">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab4' lay-filter='tab4'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+
+            <div class="layui-row layui-col-space20">
+
+                <div class="layui-col-md6">
+                    <label class="sample_label1">{{key}} SNP KEGG分类直方图：</label>
+                    <img class='tab4_img1' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                        src="/media/{{username}}/{{project}}/{{analysis}}/SNP/{{key}}/KEGG_FuncTerm.png" />
+                </div>
+                <div class="layui-col-md6">
+                    <label class="sample_label2">{{key}} INDEL KEGG分类直方图：</label>
+                    <img class='tab4_img2' style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                        src="/media/{{username}}/{{project}}/{{analysis}}/INDEL/{{key}}/KEGG_FuncTerm.png" />
+                </div>
+                <div class="layui-col-xs12">
+                    <p>注：纵坐标表示KEGG数据库通路类型以及分类ID编号；横坐标表示所选区域内该分类下-log10(P_value)值，越大表示富集越显著。默认展示前20位KEGG ID的统计信息。</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table, form = layui.form;
+    function tab1() {
+        var sample = $('#tab1').val();
+        table.render({
+            elem: '#GO分类统计'
+            , height: 500
+            , page:true
+            , loading: true
+            , url: "/wgs/index/go_pathway/{{username}}/{{project}}/{{analysis}}/" + sample + '/'     // 数据接口
+            , toolbar: true, defaultToolbar: ['filter', 'exports']
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , cols: [[
+                { field: 'id', width: 80, title: 'id', sort: true }
+                , { field: 'source', width: 80, title: 'source', sort: true }
+                , { field: 'native', width: 120, title: 'native' }
+                , { field: 'name', width: 160, title: 'name', sort: true }
+                , { field: 'p_value', width: 80, title: 'p_value' }
+                , { field: 'description', title: 'description', sort: true }
+                , { field: 'precision', title: 'precision', sort: true }
+                , { field: 'recall', title: 'recall' }
+                , { field: 'parents', width: 137, title: 'parents', sort: true }
+            ]]
+        });
+    };
+    tab1();
+    form.on('select(tab1)', function () {
+        tab1();
+    })
+</script>
+<script>
+    var $ = layui.jquery, table = layui.table, form = layui.form;
+    function tab3() {
+        var sample = $('#tab3').val();
+        table.render({
+            elem: '#KEGG分类统计'
+            , height: 500
+            , page:true
+            , loading: true
+            , url: "/wgs/index/kegg_pathway/{{username}}/{{project}}/{{analysis}}/" + sample + '/'     // 数据接口
+            , toolbar: true, defaultToolbar: ['filter', 'exports']
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , cols: [[
+                { field: 'id', width: 80, title: 'id', sort: true }
+                , { field: 'source', width: 80, title: 'source', sort: true }
+                , { field: 'native', width: 120, title: 'native' }
+                , { field: 'name', width: 160, title: 'name', sort: true }
+                , { field: 'p_value', width: 80, title: 'p_value' }
+                , { field: 'description', title: 'description', sort: true }
+                , { field: 'precision', title: 'precision', sort: true }
+                , { field: 'recall', title: 'recall' }
+                , { field: 'parents', width: 137, title: 'parents', sort: true }
+            ]]
+        });
+    };
+    tab3();
+    form.on('select(tab3)', function () {
+        tab3();
+    })
+
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab2').val();
+    function tab1_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/GO_FuncTerm.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/GO_FuncTerm.png";
+        $('.sample_label1').text(sample + " SNP GO分类直方图：");
+        $('.sample_label2').text(sample + "  GO分类直方图：");
+        $('.tab2_img1').attr('src', link1);
+        $('.tab2_img2').attr('src', link2);
+    }
+    tab1_link(sample);
+    form.on('select(tab2)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    })
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab4').val();
+    function tab2_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/SNP/" + sample + "/KEGG_FuncTerm.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/INDEL/" + sample + "/KEGG_FuncTerm.png";
+        $('.sample_label1').text(sample + " SNP KEGG分类直方图：");
+        $('.sample_label2').text(sample + " INDEL KEGG分类直方图：");
+        $('.tab4_img1').attr('src', link1);
+        $('.tab4_img2').attr('src', link2);
+    }
+    tab2_link(sample);
+    form.on('select(tab4)', function (data) {
+        var sample = data.value;
+        tab2_link(sample);
+    })
+</script>
+{%endblock%}

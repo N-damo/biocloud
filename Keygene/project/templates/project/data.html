@@ -1,0 +1,56 @@
+{% extends 'project/base.html' %}
+{%load static%}
+{% block title %}数据列表{% endblock %}
+{%block content%}
+<div class="layui-container"
+    style="overflow:auto !important;margin-top:2.5%;width:800px;height:500px;background-color: white;">
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-xs12">
+            {%if message%}
+            <strong>{{message}}</strong>
+            {%endif%}
+            <table class="layui-table" lay-filter='demo' id='demo'>
+                <thead>
+                    <tr>
+                        <th lay-data="{field:'创建者', sort: true}">创建者</th>
+                        <th lay-data="{field:'批次', sort: true}">批次</th>
+                        <th lay-data="{field:'样品名', sort: true}">样品名</th>
+                        <th lay-data="{field:'文库名', sort: true}">文库名</th>
+                        <th lay-data="{field:'接头', sort: true}">接头</th>
+                        <th lay-data="{field:'fq1', width:120}">fq1</th>
+                        <th lay-data="{field:'fq2', width:120}">fq2</th>
+                        <th lay-data="{field:'创建时间', sort: true}">创建时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for data in user_data%}
+                    <tr>
+                        <td>{{username}}</td>
+                        <td>{{data.batch}}</td>
+                        <td>{{data.sample}}</td>
+                        <td>{{data.library}}</td>
+                        <td>{{data.adapter}}</td>
+                        <td>{{data.fq1}}</td>
+                        <td>{{data.fq2}}</td>
+                        <td>{{data.c_time}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+{%endblock%}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.init('demo', {
+        toolbar: true,
+        defaultToolbar: ['filter', 'exports'],
+    });
+    table.render();
+</script>
+{%endblock%}

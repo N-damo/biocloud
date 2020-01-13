@@ -1,0 +1,30 @@
+{% extends 'project/base.html' %}
+{%load static%}
+{% block title %}参数设置{% endblock %}
+{%block css%}<style>
+    .layui-form-label {
+        width: 100px;
+    }
+</style>
+{%endblock%}
+<button class="pipeline layui-btn">pipeline</button>
+{%block pipeline%}
+<input type='text' id='childvalue' name='childvalue' value=''></input>
+<script>
+    var $ = layui.jquery, layer = layui.layer;
+    var username = '{{username}}';
+    function get_pipeline(username) {
+        $('.pipeline').click(function () {
+            layer.open({
+                type: 2,
+                title: '选择分析流程',
+                area: ['1000px', '600px'],
+                content: "/project/index/pipeline/" + username,
+            });
+        });
+    }
+    get_pipeline(username);
+
+
+</script>
+{%endblock%}

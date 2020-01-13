@@ -1,0 +1,60 @@
+{% extends 'project/base.html' %}
+{%load static%}
+{% block title %}项目列表{% endblock %}
+{%block content%}
+
+<div class="layui-container"
+    style="overflow:auto !important;margin-top:5%;width:1000px;height:500px;background-color: white;">
+    <div class="layui-row layui-col-space20">
+        <div class="layui-col-xs12">
+            <form action="{%url 'project:我的项目' username%}" method="post">
+
+                <!-- <a id='new' class="layui-btn" style="float:right">新建项目</a> -->
+                {%if message%}
+                <div class="alert alert-warning">{{ message }}</div>
+                {%endif%}
+                {% csrf_token %}
+                <div class="layui-input-inline">
+                    <button lay-submit class="layui-btn">新建项目</button>
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" type='text' name='new_project' placeholder='请输入新项目名称'>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-xs12">
+            <div class="layui-col-md6" style="text-align:left;font-weight: bold;font-size: 15px;">
+                <p>项目名称</p>
+            </div>
+            <div class="layui-col-md6" style="text-align:right;font-weight: bold;font-size: 15px;">
+                <p>操作</p>
+            </div>
+        </div>
+        <hr class="layui-bg-blue">
+        {%for project in user_project%}
+
+        <div class="layui-col-xs12">
+            <div class="layui-col-md6">
+                <i class="layui-icon layui-icon-file-b" style="margin-right:10px;font-size:30px;color:skyblue"></i>
+                <a href="{%url 'project:我的分析' username=username project=project.name %}"
+                    style="color: #01AAED;font-size: 30px">{{project.name}}</a>
+                <P style="font-size: 15px">创建人：{{username}} </P>
+                <p style="font-size: 15px">创建时间：{{project.c_time}}</P>
+            </div>
+
+            <div class="layui-col-md6">
+                <form class='delete_form' action="{%url 'project:删除项目' username=username project=project%}"
+                    method="post">
+                    {%csrf_token%}
+                    <button title='删除该项目' type='submit' class="layui-btn layui-btn-radius layui-btn-primary delete"
+                        style="float:right" layui-submit><i class="layui-icon layui-icon-delete"></i></button>
+                    <input type='hidden' type='text' name='{{project.name}}' value="{{project.name}}">
+                </form>
+            </div>
+        </div>
+
+        {%endfor%}
+    </div>
+
+</div>
+{%endblock%}

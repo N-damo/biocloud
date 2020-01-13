@@ -1,0 +1,178 @@
+{% extends 'wgs/测序数据质控/qc.html' %}
+{% block background %}
+<h1>比对信息统计</h1>
+<p>
+    利用BWA软件将质控后的测序片段（Clean Reads）比对到参考基因组，比对方法为MEM。
+    Reads锚定到参考基因组后，可以统计其对参考基因组的覆盖情况，包括：基因组覆盖度（反映变异检测的完整性），
+    基因组覆盖深度（影响变异检测的准确性），碱基覆盖深度分布（体现测序的随机性），等。
+</p>
+{%endblock%}
+{%block parameter%}
+<h3>分析软件</h3>
+<p>分析软件：bwa</p>
+{%endblock%}
+{% block tab %}
+<ul class="layui-tab-title">
+    <li class='layui-this'>比对结果统计</li>
+    <li>插入片段分布</li>
+    <li>测序深度分布</li>
+    <li>基因组覆盖分布</li>
+</ul>
+<div class="layui-tab-content">
+    <div id="比对结果统计" class="layui-tab-item layui-show">
+        
+    </div>
+    <div id="插入片段分布" class="layui-tab-item ">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab1' lay-filter='tab1'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <label class="tab1_sample_label">插入片段分布图：</label>
+                <img class='tab1_img'
+                    style="width:50%;margin-top: 25px;margin-bottom: 50px;margin-right: auto;margin-left: auto;display: block;"
+                    src="insert_size.png" />
+                <p>注：横坐标表示样品测序文库插入片段大小，纵坐标表示该长度范围所对应的reads数或比例，峰值部分即文库插入片段的中心位置。</p>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="测序深度分布" class="layui-tab-item">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab2' lay-filter='tab2'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-md6">
+                <label class="tab2_sample_label1">测序深度分布图：</label>
+                <img class="tab2_img1" style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="depth_distribution.png" />
+                <p>注：横坐标表示测序深度，即Reads覆盖度，纵坐标表示某一深度reads序列数，峰值部分即测序数据的平均深度。</p>
+            </div>
+            <div class="layui-col-md6">
+                <label class="tab2_sample_label2">测序深度累积分布图：</label>
+                <img class="tab2_img2" style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: 50px"
+                    src="depth_cumulative.png" />
+                <p>注：横坐标表示测序深度，即Reads覆盖度，纵坐标表示大于等于某一深度reads序列总数。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="基因组覆盖分布" class="layui-tab-item">
+        <div class="layui-row">
+            <div class="layui-col-xs12">
+                <form class="layui-form">
+                    <select id='tab3' lay-filter='tab3'>
+                        {% for key in dict_sub %}
+                        <option value='{{key}}' name='{{key}}' selected>{{key}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space20">
+            <div class="layui-col-xs12">
+                <label class="tab3_sample_label">基因组覆盖分布图：</label>
+                <img class="tab3_img"
+                    style="width:80%;margin-top: 25px;margin-bottom: 50px;margin-right: auto;margin-left: auto;display: block"
+                    src="genome_cov.png" />
+                <p>注：横坐标表示滑窗数（滑窗数×窗口大小=染色体长度）；每一块表示一条染色体；纵坐标为染色体上对应位置的平均覆盖深度取2的对数（Log2）所得到的值。</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{%block js%}
+<script>
+    var $ = layui.jquery, table = layui.table;
+    table.render({
+        elem: '#比对结果统计'
+        , height: 500
+        , loading: true
+        , url: "{{url('wgs:mapping_table',args=(analysis,))}}"     // 数据接口
+        , toolbar: true, defaultToolbar: ['filter', 'exports', 'print']
+        , cellMinWidth: 120 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+        , page: true
+        , cols: [[
+            { field: 'id', title: 'id', sort: true, hide: true }
+            , { field: 'Samples', title: 'Samples', sort: true }
+            , { field: 'InsertSize_mean', title: 'InsertSize_mean' }
+            , { field: 'Insert_std', title: 'Insert_std' }
+            , { field: 'Mapped_rate', title: 'Mapped_rate' }
+            , { field: 'PCR_duplication', title: 'PCR_duplication' }
+            , { field: 'MEAN_COVERAGE', title: 'MEAN_COVERAGE' }
+            , { field: 'MEDIAN_COVERAGE', title: 'MEDIAN_COVERAGE' }
+            , { field: 'Coverage_at_least_1X', title: 'Coverage_at_least_1X' }
+            , { field: 'Coverage_at_least_5X', title: 'Coverage_at_least_5X' }
+            , { field: 'Coverage_at_least_10X', title: 'Coverage_at_least_10X' }
+            , { field: 'Coverage_at_least_20X', title: 'Coverage_at_least_20X' }
+            , { field: 'Coverage_at_least_30X', title: 'Coverage_at_least_30X' }
+        ]]
+    });
+
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab1').val();
+    function tab1_link(sample) {
+        var link = "/media/{{username}}/{{project}}/{{analysis}}/mapping/" + sample + "/insert_size.png";
+        $('.tab1_img').attr('src', link);
+        $('.tab1_sample_label').text(sample + '插入片段分布图：');
+    };
+    tab1_link(sample);
+    form.on('select(tab1)', function (data) {
+        var sample = data.value;
+        tab1_link(sample);
+    })
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab2').val();
+    function tab2_link(sample) {
+        var link1 = "/media/{{username}}/{{project}}/{{analysis}}/mapping/" + sample + "/depth_distribution.png";
+        var link2 = "/media/{{username}}/{{project}}/{{analysis}}/mapping/" + sample + "/depth_cumulative.png";
+        $('.tab2_img1').attr('src', link1);
+        $('.tab2_img2').attr('src', link2);
+        $('.tab2_sample_label1').text(sample + '测序深度分布图：');
+        $('.tab2_sample_label2').text(sample + '测序深度累积分布图：');
+    };
+    tab2_link(sample);
+    form.on('select(tab2)', function (data) {
+        var sample = data.value;
+        tab2_link(sample);
+    })
+</script>
+<script>
+    var $ = layui.jquery, form = layui.form;
+    var sample = $('#tab3').val();
+    function tab3_link(sample) {
+        var link = "/media/{{username}}/{{project}}/{{analysis}}/mapping/" + sample + "/genome_cov.png";
+        $('.tab3_img').attr('src', link);
+        $('.tab3_sample_label').text(sample + '基因组覆盖分布图：');
+    };
+    tab3_link(sample);
+    form.on('select(tab3)', function (data) {
+        var sample = data.value;
+        tab3_link(sample);
+    })
+</script>
+{%endblock%}

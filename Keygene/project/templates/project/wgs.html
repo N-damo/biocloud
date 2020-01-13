@@ -1,0 +1,54 @@
+{% extends 'project/workflow.html' %}
+{%load static%}
+{% block title %}参数设置{% endblock %}
+{%block content%}
+<form class="layui-form" enctype="multipart/form-data"
+    action="{%url 'project:交互分析表单' username=username project=project analysis=analysis %}" method="post">
+    {% if message %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+
+    {% csrf_token %}
+    <fieldset class="layui-elem-filed">
+        <legend class="text-center">创建分析流程</legend>
+        <div class="layui-filed-box">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{analysis_form.reference.label }}</label>
+                <div class="layui-input-inline">{{ analysis_form.reference}}</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{analysis_form.variant_software.label }}</label>
+                <div class="layui-input-inline">{{ analysis_form.variant_software}}</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{analysis_form.cnv_software.label }}</label>
+                <div class="layui-input-inline">{{ analysis_form.cnv_software}}</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{analysis_form.sv_software.label }}</label>
+                <div class="layui-input-inline">{{ analysis_form.sv_software}}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a class="layui-btn layui-btn-primary layui-btn-radius" id='raw_data' user="{{username}}">查看原始数据</a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">{{ analysis_form.data_table.label }}</label>
+                <div class="layui-input-inline">{{ analysis_form.data_table }}</div>
+                <p style="font-weight: bold;font-size:15px;color:red">{{analysis_form.data_table.errors.0}}</p>
+            </div>
+            <div class="layui-form-item">
+                <button type="reset" class="layui-btn layui-btn-primary layui-btn-radius">重置</button>
+                <button type="submit" class="layui-btn layui-btn-primary layui-btn-radius">开始分析</button>
+                <a id='demo' class="layui-btn layui-btn-primary layui-btn-radius" href="/static/input.txt"
+                    download="input.txt">demo</a>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{%endblock%}
+{%block js%}
+<script>analysis_form($('#raw_data').attr('user'));</script>
+{%endblock%}

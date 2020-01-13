@@ -1,0 +1,22 @@
+{%extends 'mysite_login/base.html'%}
+{%block title%}Chat Rooms{%endblock%}
+{%block content%}
+    <p>What chat room would you like to enter?</p>
+    <input id="room-name-input" type="text" size="100"/><br/>
+    <input id="room-name-submit" type="button" value="Enter"/>
+{%endblock%}
+{%block js%}
+<script>
+    document.querySelector('#room-name-input').focus();
+    document.querySelector('#room-name-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#room-name-submit').click();
+        }
+    };
+
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        var roomName = document.querySelector('#room-name-input').value;
+        window.location.pathname = '/chat/' + roomName + '/';
+    };
+</script>
+{%endblock%}
