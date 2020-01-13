@@ -1,6 +1,3 @@
-
-
-
 # 云平台使用手册
 
 
@@ -19,7 +16,7 @@ step2:
 **启动mysql和redis数据库**，其中mysql挂载$HOME/mysql  
 `docker run -itd -p 6379:6379 --name redis redis:5.0.7`
 
-`docker run -v $HOME/mysql:/var/lib/mysql -itd --name mysql -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=179353 mysql:8.0.18`    
+`docker run -v $HOME/mysql:/var/lib/mysql -itd --name mysql -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=123456 mysql:8.0.18`    
 >mysql每次创建新容器后需要修改配置,修改后可远程登录；若不远程登录，则不需要以下修改命令：  
 >进入mysql容器;  
 >docker exec -it mysql bash  
@@ -28,11 +25,11 @@ step2:
 >创建wgs，已创建就忽略这一步;  
 >create database wgs;  
 >修改远程登录设置;  
->ALTER USER 'root'@'%' IDENTIFIED WITH   mysql_native_password BY '179353';
+>ALTER USER 'root'@'%' IDENTIFIED WITH   mysql_native_password BY '123456';
 >刷新;  
 >flush privileges;  
 >退出;  
-exit  
+>exit  
 
 
 step3:
