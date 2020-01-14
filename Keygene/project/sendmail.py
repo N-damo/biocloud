@@ -6,9 +6,9 @@ from email.mime.text import MIMEText
 def sendmail(email,analysis):
     # 第三方 SMTP 服务
     mail_host = "smtp.163.com"  # SMTP服务器
-    mail_user = "18805023372@163.com"  # 用户名
-    mail_pass = "lia179353"  # 密码
-    sender = '18805023372@163.com'  # 发件人邮箱(最好写全, 不然会失败)
+    mail_user = ""  # 用户名
+    mail_pass = ""  # 密码
+    sender = ''  # 发件人邮箱(最好写全, 不然会失败)
     receivers = [email]  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
     content = '分析任务[{}]已完成，请及时登录网址查看。'.format(analysis)
     title = 'Keygene'  # 邮件主题
