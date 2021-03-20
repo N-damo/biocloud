@@ -1,6 +1,6 @@
 django==2.2
 pandas==0.25.3
-jinja2==2.10.3 
+jinja2==2.11.3 
 pymysql==0.9.3
 redis==3.3.11
 django-simple-captcha==0.5.12
