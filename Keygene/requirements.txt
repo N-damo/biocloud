@@ -1,4 +1,4 @@
-django==2.2
+django==2.2.27
 pandas==0.25.3
 jinja2==2.10.3 
 pymysql==0.9.3
